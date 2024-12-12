@@ -29,6 +29,9 @@ namespace AssetAtlasApi.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("Amount")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
 
                     b.ToTable("Expenses");

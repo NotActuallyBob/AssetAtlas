@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace AssetAtlasApi.Migrations
 {
     [DbContext(typeof(AtlasDbContext))]
-    [Migration("20241212160914_InitialCreate")]
+    [Migration("20241212162618_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -31,6 +31,9 @@ namespace AssetAtlasApi.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Amount")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
