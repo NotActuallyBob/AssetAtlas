@@ -1,0 +1,6 @@
+@AssetAtlasApi_HostAddress = http://localhost:5152
+
+GET {{AssetAtlasApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
