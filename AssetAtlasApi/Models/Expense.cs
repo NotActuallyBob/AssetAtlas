@@ -8,5 +8,6 @@ namespace AssetAtlasApi.Models {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public int Amount { get; set; }
+        public DateTime SpendTime { get; set; }
     }
 }
