@@ -1,18 +1,9 @@
-<script setup lang="ts">
-</script>
-
 <template>
   <v-app>
     <v-app-bar>
       <v-app-bar-title>
         <router-link to="/">
-          Graph
-        </router-link>
-        <router-link to="/categorization">
-          Categorization
-        </router-link>
-        <router-link to="/upload">
-          Upload
+          Main
         </router-link>
       </v-app-bar-title>
     </v-app-bar>
@@ -28,6 +19,3 @@
     </v-main>
   </v-app>
 </template>
-
-<style scoped>
-</style>

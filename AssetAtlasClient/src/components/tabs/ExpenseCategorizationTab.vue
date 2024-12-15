@@ -20,11 +20,11 @@
 </template>
 
 <script setup lang="ts">
-  import { onMounted, onUnmounted, ref } from "vue";
+  import { onMounted, ref } from "vue";
 
-  import { useExpenseStore } from "../stores/expenseStore";
-  import { expenseCategory } from "../models/Expense";
-  import restHelper from "../helpers/restHelper";
+  import { useExpenseStore } from "../../stores/expenseStore";
+  import { expenseCategory } from "../../models/Expense";
+  import restHelper from "../../helpers/restHelper";
 
   const expenseStore = useExpenseStore();
 

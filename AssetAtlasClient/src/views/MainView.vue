@@ -1,65 +1,15 @@
 <template>
-    <h1>Spending Graph</h1>
-    <input type="text" v-model="start"></input>
-    <input type="text" v-model="end"></input>
-    <button @click="refreshData">Refresh</button>
-    <h2>Total {{ expenseStore.expenseTotal.toFixed(0) }}€</h2>
-    <div id="chartdiv"></div>
+  <v-tabs v-model="activeTab">
+    <v-tab :to="{ name: 'analyze' }">Analyze</v-tab>
+    <v-tab :to="{ name: 'categorize' }">Categorize</v-tab>
+    <v-tab :to="{ name: 'upload' }">Upload</v-tab>
+  </v-tabs>
+
+  <RouterView />
 </template>
 
 <script setup lang="ts">
-  import { onMounted, onUnmounted, ref } from "vue";
-  import * as am5 from "@amcharts/amcharts5";
-  import * as am5percent from "@amcharts/amcharts5/percent";
-  import { useExpenseStore } from "../stores/expenseStore";
-  import { addSeries, createPie, createRoot } from "../plugins/amcharts";
+import { ref } from 'vue';
 
-  const expenseStore = useExpenseStore();
-
-  let root: am5.Root | null | undefined = undefined;
-  let chart: am5percent.PieChart | undefined = undefined;
-  let series: am5percent.PieSeries | undefined = undefined;
-
-  let start = ref('2024-01-01')
-  let end = ref('2024-12-31')
-
-  async function refreshData() {
-    await expenseStore.refresh(start.value, end.value);
-
-    if(!series) {
-        return;
-    }
-
-    series.data.setAll(expenseStore.expenses);
-  }
-
-  onMounted(async () => {
-    root = createRoot('chartdiv');
-    chart = createPie(root);
-    series = addSeries(root, chart, "Series", "category", "amount", "default");
-
-    series.labels.template.setAll({
-      text: "{category}: {value}€", // Use valueField (amount) as the label
-      textType: "circular", // Ensures the text wraps around the slice
-      centerX: am5.p50,
-      centerY: am5.p50,
-      inside: true, // Place the labels inside the slices
-    });
-    await refreshData();
-  });
-
-  onUnmounted(() => {
-    if (root) {
-      root.dispose();
-      root = null;
-    }
-  });
-
+const activeTab = ref("analyze");
 </script>
-
-<style scoped>
-#chartdiv {
-  width: 1200px;
-  height: 600px;
-}
-</style>
