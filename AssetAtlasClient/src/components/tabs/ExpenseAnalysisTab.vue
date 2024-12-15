@@ -1,10 +1,24 @@
 <template>
-  <h1>Spending Graph</h1>
-  <input type="text" v-model="start"></input>
-  <input type="text" v-model="end"></input>
-  <button @click="refreshData">Refresh</button>
-  <h2>Total {{ expenseStore.expenseTotal.toFixed(0) }}€</h2>
-  <div id="chartdiv"></div>
+  <v-container fluid>
+    <h1>Spending Graph</h1>
+    
+    <input type="text" v-model="start"></input>
+    <input type="text" v-model="end"></input>
+    <button @click="refreshData">Refresh</button>
+    <h2>Total {{ expenseStore.expenseTotal.toFixed(0) }}€</h2>
+    <v-row>
+      <v-col cols="12" lg="6">
+        <div id="chartdiv"></div>
+      </v-col>
+      <v-col cols="12" lg="5">
+        <v-data-table
+          width="100px"
+            :items="expenseStore.expenses"
+          >
+          </v-data-table>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script setup lang="ts">
@@ -60,7 +74,7 @@ import { onMounted, onUnmounted, ref } from "vue";
 
 <style scoped>
 #chartdiv {
-  width: 1200px;
+  width: 100%;
   height: 600px;
 }
 </style>
