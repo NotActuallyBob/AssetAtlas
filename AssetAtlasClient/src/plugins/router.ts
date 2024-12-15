@@ -1,7 +1,7 @@
 import { createRouter } from 'vue-router'
 import { createWebHistory } from 'vue-router'
 
-import MainView from '../views/MainView.vue'
+import ExpenseView from '../views/ExpenseView.vue'
 
 import ExpenseAnalysisTab from '../components/tabs/ExpenseAnalysisTab.vue'
 import ExpenseCategorizationTab from '../components/tabs/ExpenseCategorizationTab.vue'
@@ -9,9 +9,10 @@ import ExpenseUploadTab from '../components/tabs/ExpenseUploadTab.vue'
 
 const routes = [
     { 
-        path: '/', 
-        name: 'Main', 
-        component: MainView,
+        path: '/expense', 
+        name: 'expense', 
+        component: ExpenseView,
+        redirect: '/expense/analyze',
         children: [
             {
                 path: 'analyze',

@@ -1,11 +1,11 @@
 <template>
   <v-app>
-    <v-app-bar>
-      <v-app-bar-title>
-        <router-link to="/">
-          Main
+    <v-app-bar color="primary">
+      <v-btn>
+        <router-link class="navigationlink" :to="{ name: 'expense' }">
+            Expense
         </router-link>
-      </v-app-bar-title>
+      </v-btn>
     </v-app-bar>
 
     <v-main>
@@ -19,3 +19,10 @@
     </v-main>
   </v-app>
 </template>
+
+<style scoped>
+.navigationlink {
+  color: white;
+  text-decoration: none;
+}
+</style>
