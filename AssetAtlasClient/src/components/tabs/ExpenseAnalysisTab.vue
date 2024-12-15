@@ -5,7 +5,6 @@
     <input type="text" v-model="start"></input>
     <input type="text" v-model="end"></input>
     <button @click="refreshData">Refresh</button>
-    <h2>Total {{ expenseStore.expenseTotal.toFixed(0) }}€</h2>
     <v-row>
       <v-col cols="12" lg="6">
         <div id="chartdiv"></div>
@@ -16,6 +15,7 @@
             :items="expenseStore.expenses"
           >
           </v-data-table>
+          <h2>Total {{ expenseStore.expenseTotal.toFixed(0) }}€</h2>
       </v-col>
     </v-row>
   </v-container>
