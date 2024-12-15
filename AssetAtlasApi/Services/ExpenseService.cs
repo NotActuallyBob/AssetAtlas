@@ -24,5 +24,9 @@ namespace AssetAtlasApi.Services {
 
             return expenses;
         }
+
+        public List<Expense> GetUncategorized() {
+            return context.Expenses.Where(x => x.ExpenseCategory == Category.Uncategorized).ToList();
+        }
     }
 }

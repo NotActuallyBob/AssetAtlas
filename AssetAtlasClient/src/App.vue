@@ -6,7 +6,13 @@
     <v-app-bar>
       <v-app-bar-title>
         <router-link to="/">
-          Main Page
+          Graph
+        </router-link>
+        <router-link to="/categorization">
+          Categorization
+        </router-link>
+        <router-link to="/upload">
+          Upload
         </router-link>
       </v-app-bar-title>
     </v-app-bar>

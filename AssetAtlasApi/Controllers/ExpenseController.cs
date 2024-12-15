@@ -1,4 +1,5 @@
-﻿using AssetAtlasApi.Models;
+﻿using AssetAtlasApi.Dtos;
+using AssetAtlasApi.Models;
 using AssetAtlasApi.Services;
 using CsvHelper;
 using Microsoft.AspNetCore.Mvc;
@@ -18,7 +19,7 @@ namespace AssetAtlasApi.Controllers {
             this.expenseService = expenseService;
         }
 
-        [HttpPost]
+        [HttpPost("/api/ExpensesUpload")]
         public async Task<IActionResult> UploadCsv(IFormFile file) {
             if (file == null || file.Length == 0)
                 return BadRequest("No file uploaded.");
@@ -65,6 +66,29 @@ namespace AssetAtlasApi.Controllers {
 
 
             return expenseService.GetPeriodExpences(startDate, endDate);
+        }
+
+        [HttpGet("/api/ExpensesUncategorized")]
+        public List<Expense> GetUncateorized() {
+            return expenseService.GetUncategorized();
+        }
+
+        [HttpPost("/api/ExpensesCategorize")]
+        public void Categorize([FromBody] CategorizationDto categorizationDto) {
+            if(categorizationDto == null) return;
+
+            foreach (int id in categorizationDto.ids) {
+                var expense = context.Expenses.FirstOrDefault(x => x.Id == id);
+                if (expense == null) {
+                    continue;
+                }
+
+                expense.ExpenseCategory = categorizationDto.category;
+            }
+
+            context.SaveChanges();
+
+            return;
         }
 
         // GET api/<ExpenseController>/5

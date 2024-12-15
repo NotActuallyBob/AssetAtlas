@@ -1,9 +1,10 @@
 <template>
+    <h1>Spending Graph</h1>
     <input type="text" v-model="start"></input>
     <input type="text" v-model="end"></input>
     <button @click="refreshData">Refresh</button>
+    <h2>Total {{ expenseStore.expenseTotal.toFixed(0) }}€</h2>
     <div id="chartdiv"></div>
-    <v-btn>lol</v-btn>
 </template>
 
 <script setup lang="ts">
@@ -58,7 +59,7 @@
 
 <style scoped>
 #chartdiv {
-  width: 800px;
+  width: 1200px;
   height: 600px;
 }
 </style>

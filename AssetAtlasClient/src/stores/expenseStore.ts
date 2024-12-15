@@ -1,31 +1,22 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import restHelper from '../helpers/restHelper'
+import { Expense, expenseCategory } from '../models/Expense'
 
 export const useExpenseStore = defineStore('expense', () => {
   // State
   const expenses = ref([])
+  const expenseTotal = ref<number>(0);
 
-
-  enum Category {
-    Uncategorized = 0,
-    Groceries = 1,
-    Housing = 2,
-    Restaurants = 3,
-    Travel = 4,
-    Entertainment = 5,
-    Hobbies = 6,
-    Clothing = 7,
-    Health = 8,
-    Other = 9,
-  }
+  const unCategorized = ref<Expense[]>([])
 
   function getCategoryName(value: number): string {
-    return Category[value] || "Unknown";
+    return expenseCategory[value] || "Unknown";
   }
 
   // Actions
   const refresh = async (start: string, end: string) => {
+    expenseTotal.value = 0;
     const response = await restHelper.get("/api/Expense", {
         params: {
             start,
@@ -33,14 +24,27 @@ export const useExpenseStore = defineStore('expense', () => {
         }
     });
 
-    expenses.value = response.data.map((obj: { item1: number; item2: number }) => ({
+    expenses.value = response.data.map((obj: { item1: number; item2: number }) => {
+      const amount = obj.item2 / 100
+      expenseTotal.value += amount;
+      return {
         category: getCategoryName(obj.item1),
-        amount: obj.item2 / 100,
-    }));
+        amount
+      };
+    });
+  }
+
+  const refreshUncategorized = async () => {
+    const response = await restHelper.get("/api/ExpensesUncategorized");
+
+    unCategorized.value = response.data as Expense[];
   }
 
   return {
     expenses,
     refresh,
+    expenseTotal,
+    unCategorized,
+    refreshUncategorized
   }
 })
