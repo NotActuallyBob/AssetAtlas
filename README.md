@@ -1,5 +1,5 @@
 # AssetAtlas
-A project to keep track of my personal finances. It is not publicly hosted so it is not possible to try it.
+A project to keep track of my personal finances. It is not publicly hosted
 
 #Features
 - Expense data originates by uploading .csv file downloaded from the bank
