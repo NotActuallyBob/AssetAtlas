@@ -57,12 +57,14 @@ namespace AssetAtlasApi.Controllers {
 
         // GET: api/<ExpenseController>
         [HttpGet]
-        public List<Tuple<Category, int>> Get() {
-            DateTime end = DateTime.Now;
-            DateTime start = DateTime.Now.AddDays(-30);
+        public List<Tuple<Category, int>> Get(string start, string end) {
+            if(string.IsNullOrEmpty(start) || string.IsNullOrEmpty(end)) return new List<Tuple<Category, int>>();
+
+            DateTime startDate = DateTime.SpecifyKind(DateTime.Parse(start), DateTimeKind.Utc);
+            DateTime endDate = DateTime.SpecifyKind(DateTime.Parse(end), DateTimeKind.Utc);
 
 
-            return expenseService.GetPeriodExpences(start, end);
+            return expenseService.GetPeriodExpences(startDate, endDate);
         }
 
         // GET api/<ExpenseController>/5

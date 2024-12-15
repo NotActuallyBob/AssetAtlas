@@ -15,8 +15,9 @@ namespace AssetAtlasApi.Services {
 
         public List<Tuple<Category, int>> GetPeriodExpences(DateTime start, DateTime end) {
             List <Tuple<Category, int>> expenses = new List <Tuple<Category, int>>();
+            var expensesInDb = context.Expenses.Where(x => x.SpendTime <= end && x.SpendTime >= start);
             foreach (Category category in Enum.GetValues(typeof(Category))) {
-                var expensesOfCategory = context.Expenses.Where(x => x.ExpenseCategory == category);
+                var expensesOfCategory = expensesInDb.Where(x => x.ExpenseCategory == category);
 
                 expenses.Add(Tuple.Create(category, expensesOfCategory.Sum(x => x.Amount)));
             }
