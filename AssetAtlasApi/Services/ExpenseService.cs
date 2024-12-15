@@ -25,6 +25,42 @@ namespace AssetAtlasApi.Services {
             return expenses;
         }
 
+        static string[] keywordsEntertainment = ["baribal", "help.max", "finnkino"];
+        static string[] keywordsGrocieries = ["alepa", "s-market", "prisma", "compass group finland", "k-market"];
+        static string[] keywordsRestaurants = ["ravintola", "restaurant"];
+        static string[] keywordsHousing = ["verbo"];
+        static string[] keywordsTravel = ["bolt", "helsingin seudun"];
+
+        public void CategorizeExpenses(IEnumerable<Expense> expenses) {
+            foreach (var expense in expenses) {
+                if(expense.ExpenseCategory != Category.Uncategorized) {
+                    continue;
+                }
+
+                string recipient = expense.Recipient.ToLower();
+
+                if(keywordsEntertainment.Any(x => recipient.Contains(x))) {
+                    expense.ExpenseCategory = Category.Entertainment;
+                }
+
+                if (keywordsGrocieries.Any(x => recipient.Contains(x))) {
+                    expense.ExpenseCategory = Category.Groceries;
+                }
+
+                if(keywordsRestaurants.Any(x => recipient.Contains(x))) {
+                    expense.ExpenseCategory = Category.Restaurants;
+                }
+
+                if(keywordsHousing.Any(x => recipient.Contains(x))) {
+                    expense.ExpenseCategory = Category.Housing;
+                }
+
+                if(keywordsTravel.Any(x => recipient.Contains(x))) {
+                    expense.ExpenseCategory = Category.Travel;
+                }
+            }
+        }
+
         public List<Expense> GetUncategorized() {
             return context.Expenses.Where(x => x.ExpenseCategory == Category.Uncategorized).ToList();
         }

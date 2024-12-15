@@ -43,12 +43,12 @@ namespace AssetAtlasApi.Controllers {
                 });
 
                 expenses = expenses.Where(x => x.Amount > 0).ToList();
-                List<Expense> expenseList = expenses.Where(x => x.Amount > 0).ToList();
+                expenseService.CategorizeExpenses(expenses);
 
                 context.Expenses.AddRange(expenses);
                 await context.SaveChangesAsync();
 
-                return Ok(new { Message = "CSV uploaded and processed successfully.", Count = expenseList.Count });
+                return Ok();
             } catch (Exception ex) {
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
