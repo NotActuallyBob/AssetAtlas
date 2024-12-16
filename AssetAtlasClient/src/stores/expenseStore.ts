@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import restHelper from '../helpers/restHelper'
 import { Expense, expenseCategory } from '../models/Expense'
+import { ExpenseDto } from '../dtos/ExpenseDto'
 
 export const useExpenseStore = defineStore('expense', () => {
   // State
@@ -35,9 +36,21 @@ export const useExpenseStore = defineStore('expense', () => {
   }
 
   const refreshUncategorized = async () => {
-    const response = await restHelper.get("/api/ExpensesUncategorized");
+    const dataDto = (await restHelper.get("/api/ExpensesUncategorized")).data as ExpenseDto[];
 
-    unCategorized.value = response.data as Expense[];
+    let dataExpenses: Expense[] = dataDto.map((dto: ExpenseDto) => {
+      let expense: Expense = {
+        id: dto.id,
+        amount: dto.amount,
+        spendTime: new Date(dto.spendTime),
+        recipient: dto.recipient,
+        expenseCategory: dto.expenseCategory
+      };
+
+      return expense;
+    })
+
+    unCategorized.value = dataExpenses;
   }
 
   return {

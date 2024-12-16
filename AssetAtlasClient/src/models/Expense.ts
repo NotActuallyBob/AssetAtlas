@@ -12,9 +12,9 @@ export enum expenseCategory {
 }
 
 export type Expense = {
-    id: string,
+    id: number,
     amount: number,
     recipient: string,
     expenseCategory: expenseCategory,
-    spendTime: string,
+    spendTime: Date,
 }

@@ -13,9 +13,21 @@
     <v-data-table 
         v-model="selected"
         item-value="id"
+        :headers="headers"
         show-select
         :items="expenseStore.unCategorized"
-        >
+    >
+        <template v-slot:item.spendTime="{ value }">
+            {{ value.getDate() }}.{{ value.getMonth()+1 }}.{{ value.getFullYear() }}
+        </template>
+
+        <template v-slot:item.amount="{ value }">
+            {{ value / 100 }}€
+        </template>
+
+        <template v-slot:item.expenseCategory="{ value }">
+            {{ expenseCategory[value] }}
+        </template>
     </v-data-table>
 </template>
 
@@ -31,12 +43,19 @@
   const loading = ref<boolean>(false);
   const selected = ref([]);
   const selectedCategory = ref<number>();
+  
+  const headers = [
+    { title: 'Recipient', key: 'recipient' },
+    { title: 'SpendTime', key: 'spendTime' },
+    { title: 'Amount', key: 'amount' },
+    { title: 'Category', key: 'expenseCategory' },
+  ];
 
   const categoryOptions = Object.keys(expenseCategory)
-  .filter((key) => isNaN(Number(key))) // Exclude reverse-mapped numeric keys
+  .filter((key) => isNaN(Number(key)))
   .map((key) => ({
-    text: key, // Use the key (name of the category) as text
-    value: expenseCategory[key as keyof typeof expenseCategory], // Use the numeric value
+    text: key,
+    value: expenseCategory[key as keyof typeof expenseCategory],
   }));
 
   onMounted(async () => {
