@@ -1,5 +1,5 @@
 ﻿namespace AssetAtlasApi.Models {
-    public class CsvExpense {
+    public class CsvRecord {
         public string Kirjauspäivä { get; set; } // Booking Date
         public string Maksupäivä { get; set; }   // Payment Date
         public string Summa { get; set; }        // Amount

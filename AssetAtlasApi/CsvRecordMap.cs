@@ -2,8 +2,8 @@
     using AssetAtlasApi.Models;
     using CsvHelper.Configuration;
 
-    public class CsvExpenseMap : ClassMap<CsvExpense> {
-        public CsvExpenseMap() {
+    public class CsvRecordMap : ClassMap<CsvRecord> {
+        public CsvRecordMap() {
             Map(m => m.Kirjauspäivä).Name("Kirjauspäivä");
             Map(m => m.Maksupäivä).Name("Maksupäivä");
             Map(m => m.Summa).Name("Summa");

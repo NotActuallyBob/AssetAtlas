@@ -25,26 +25,32 @@ namespace AssetAtlasApi.Controllers {
                 return BadRequest("No file uploaded.");
 
             try {
-                var csvRecords = new List<CsvExpense>();
+                var csvRecords = new List<CsvRecord>();
 
                 using (var stream = file.OpenReadStream())
                 using (var reader = new StreamReader(stream))
                 using (var csv = new CsvReader(reader, CultureInfo.GetCultureInfo("fi-FI"))) // Use Finnish culture
                 {
-                    csv.Context.RegisterClassMap<CsvExpenseMap>(); // Register the mapping
-                    csvRecords = csv.GetRecords<CsvExpense>().ToList();
+                    csv.Context.RegisterClassMap<CsvRecordMap>(); // Register the mapping
+                    csvRecords = csv.GetRecords<CsvRecord>().ToList();
                 }
 
                 // Map CsvExpense to Expense model
-                IEnumerable<Expense> expenses = csvRecords.Select(record => new Expense {
+                IEnumerable<Expense> expenses = csvRecords.Where(x => x.Summa.StartsWith("-") && !x.Tapahtumalaji.Contains("OMA")).Select(record => new Expense {
                     Amount = (int)(decimal.Parse(record.Summa.Replace(",", "."), NumberStyles.Any, CultureInfo.InvariantCulture) * -100),
                     SpendTime = DateTime.SpecifyKind(DateTime.ParseExact(record.Kirjauspäivä, "dd.MM.yyyy", CultureInfo.InvariantCulture), DateTimeKind.Utc),
                     Recipient = record.SaajanNimi
                 });
 
-                expenses = expenses.Where(x => x.Amount > 0).ToList();
+                IEnumerable<Income> incomes = csvRecords.Where(x => x.Summa.StartsWith("+") && !x.Tapahtumalaji.Contains("OMA")).Select(record => new Income {
+                    Amount = (int)(decimal.Parse(record.Summa.Replace(",", "."), NumberStyles.Any, CultureInfo.InvariantCulture) * 100),
+                    PaymentTime = DateTime.SpecifyKind(DateTime.ParseExact(record.Kirjauspäivä, "dd.MM.yyyy", CultureInfo.InvariantCulture), DateTimeKind.Utc),
+                    Source = record.Maksaja
+                });
+;
                 expenseService.CategorizeExpenses(expenses);
 
+                context.Incomes.AddRange(incomes);
                 context.Expenses.AddRange(expenses);
                 await context.SaveChangesAsync();
 
