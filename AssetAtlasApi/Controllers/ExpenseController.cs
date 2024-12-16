@@ -40,13 +40,13 @@ namespace AssetAtlasApi.Controllers {
                     Amount = (int)(decimal.Parse(record.Summa.Replace(",", "."), NumberStyles.Any, CultureInfo.InvariantCulture) * -100),
                     SpendTime = DateTime.SpecifyKind(DateTime.ParseExact(record.Kirjauspäivä, "dd.MM.yyyy", CultureInfo.InvariantCulture), DateTimeKind.Utc),
                     Recipient = record.SaajanNimi
-                });
+                }).ToList();
 
                 IEnumerable<Income> incomes = csvRecords.Where(x => x.Summa.StartsWith("+") && !x.Tapahtumalaji.Contains("OMA")).Select(record => new Income {
                     Amount = (int)(decimal.Parse(record.Summa.Replace(",", "."), NumberStyles.Any, CultureInfo.InvariantCulture) * 100),
                     PaymentTime = DateTime.SpecifyKind(DateTime.ParseExact(record.Kirjauspäivä, "dd.MM.yyyy", CultureInfo.InvariantCulture), DateTimeKind.Utc),
                     Source = record.Maksaja
-                });
+                }).ToList();
 ;
                 expenseService.CategorizeExpenses(expenses);
 

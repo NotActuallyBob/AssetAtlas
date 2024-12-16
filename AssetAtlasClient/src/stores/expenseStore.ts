@@ -9,14 +9,16 @@ export const useExpenseStore = defineStore('expense', () => {
   const expenses = ref([])
   const expenseTotal = ref<number>(0);
 
+  const incomes = ref([])
+  const incomeTotal = ref<number>(0);
+
   const unCategorized = ref<Expense[]>([])
 
   function getCategoryName(value: number): string {
     return expenseCategory[value] || "Unknown";
   }
 
-  // Actions
-  const refresh = async (start: string, end: string) => {
+  const refreshExpenses = async (start: string, end: string) => {
     expenseTotal.value = 0;
     const response = await restHelper.get("/api/Expense", {
         params: {
@@ -30,6 +32,25 @@ export const useExpenseStore = defineStore('expense', () => {
       expenseTotal.value += amount;
       return {
         category: getCategoryName(obj.item1),
+        amount
+      };
+    });
+  }
+
+  const refreshIncomes = async (start: string, end: string) => {
+    incomeTotal.value = 0;
+    const response = await restHelper.get("/api/Income", {
+        params: {
+            start,
+            end
+        }
+    });
+
+    incomes.value = response.data.map((obj: { item1: number; item2: number }) => {
+      const amount = obj.item2 / 100
+      incomeTotal.value += amount;
+      return {
+        source: obj.item1,
         amount
       };
     });
@@ -55,9 +76,12 @@ export const useExpenseStore = defineStore('expense', () => {
 
   return {
     expenses,
-    refresh,
+    refreshExpenses,
     expenseTotal,
     unCategorized,
-    refreshUncategorized
+    refreshUncategorized,
+    incomes,
+    incomeTotal,
+    refreshIncomes
   }
 })
