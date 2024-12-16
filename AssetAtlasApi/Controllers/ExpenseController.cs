@@ -90,26 +90,5 @@ namespace AssetAtlasApi.Controllers {
 
             return;
         }
-
-        // GET api/<ExpenseController>/5
-        [HttpGet("{id}")]
-        public string Get(int id) {
-            return "value";
-        }
-
-        //// POST api/<ExpenseController>
-        //[HttpPost]
-        //public void Post([FromBody] string value) {
-        //}
-
-        // PUT api/<ExpenseController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value) {
-        }
-
-        // DELETE api/<ExpenseController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id) {
-        }
     }
 }
