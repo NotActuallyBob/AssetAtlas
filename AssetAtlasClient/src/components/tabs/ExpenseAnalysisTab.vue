@@ -6,14 +6,17 @@
     <input type="text" v-model="end"></input>
     <button @click="refreshData">Refresh</button>
     <v-row>
-      <v-col cols="12" lg="6">
+      <v-col>
         <div id="chartdiv"></div>
       </v-col>
-      <v-col cols="12" lg="5">
+      <v-col>
         <v-data-table
           width="100px"
             :items="expenseStore.expenses"
           >
+            <template v-slot:item.amount="{ value }">
+              {{ value }}€
+            </template>
           </v-data-table>
           <h2>Total {{ expenseStore.expenseTotal.toFixed(0) }}€</h2>
       </v-col>

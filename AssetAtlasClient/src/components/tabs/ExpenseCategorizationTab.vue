@@ -1,34 +1,37 @@
 <template>
-    <v-select 
-        v-model="selectedCategory"
-        :items="categoryOptions"
-        item-title="text"
-        item-value="value"
-        :loading="loading"
-    ></v-select>
-    <v-btn 
-        @click="save">
-        Save
-    </v-btn>
-    <v-data-table 
-        v-model="selected"
-        item-value="id"
-        :headers="headers"
-        show-select
-        :items="expenseStore.unCategorized"
-    >
-        <template v-slot:item.spendTime="{ value }">
-            {{ value.getDate() }}.{{ value.getMonth()+1 }}.{{ value.getFullYear() }}
-        </template>
+    <v-row>
+        <v-col>
+            <v-data-table 
+                v-model="selected"
+                item-value="id"
+                :headers="headers"
+                show-select
+                :items="expenseStore.unCategorized"
+            >
+                <template v-slot:item.spendTime="{ value }">
+                    {{ value.getDate() }}.{{ value.getMonth()+1 }}.{{ value.getFullYear() }}
+                </template>
 
-        <template v-slot:item.amount="{ value }">
-            {{ value / 100 }}€
-        </template>
-
-        <template v-slot:item.expenseCategory="{ value }">
-            {{ expenseCategory[value] }}
-        </template>
-    </v-data-table>
+                <template v-slot:item.amount="{ value }">
+                    {{ value / 100 }}€
+                </template>
+            </v-data-table>
+        </v-col>
+        <v-col>
+            <h1>Choose category:</h1>
+            <v-select
+                v-model="selectedCategory"
+                :items="categoryOptions"
+                item-title="text"
+                item-value="value"
+                :loading="loading"
+            ></v-select>
+            <v-btn 
+                @click="save">
+                Save
+            </v-btn>
+        </v-col>
+    </v-row>
 </template>
 
 <script setup lang="ts">
@@ -48,7 +51,6 @@
     { title: 'Recipient', key: 'recipient' },
     { title: 'SpendTime', key: 'spendTime' },
     { title: 'Amount', key: 'amount' },
-    { title: 'Category', key: 'expenseCategory' },
   ];
 
   const categoryOptions = Object.keys(expenseCategory)
