@@ -17,7 +17,7 @@
           width="100px"
             :items="expenseStore.expenses"
         >
-          <template v-slot:item.amount="{ value }">
+          <template v-slot:item.value="{ value }">
             {{ value }}€
           </template>
         </v-data-table>
@@ -25,8 +25,6 @@
       </v-col>
     </v-row>
     <h1>Income Chart</h1>
-    <input type="text" v-model="start"></input>
-    <input type="text" v-model="end"></input>
     <button @click="refreshIncomeData">Refresh</button>
     <v-row>
       <v-col>
@@ -41,7 +39,7 @@
           width="100px"
             :items="expenseStore.incomes"
           >
-            <template v-slot:item.amount="{ value }">
+            <template v-slot:item.value="{ value }">
               {{ value }}€
             </template>
           </v-data-table>
