@@ -1,5 +1,6 @@
 import * as am5 from "@amcharts/amcharts5";
 import * as am5percent from "@amcharts/amcharts5/percent";
+import * as am5xy from "@amcharts/amcharts5/xy";
 import am5themes_Animated from "@amcharts/amcharts5/themes/Animated";
 
 export type ColorSetName = "default";
@@ -60,4 +61,57 @@ export function addSeries(root: am5.Root, chart: am5percent.PieChart, name: stri
     );
 
     return series
+}
+
+
+export function createXY(root: am5.Root): am5xy.XYChart {
+    let chart: am5xy.XYChart = am5xy.XYChart.new(root, {
+        panX: false,
+        panY: false
+    });
+
+    return chart;
+}
+
+export function addXAxis(root: am5.Root, chart: am5xy. XYChart): am5xy.DateAxis<am5xy.AxisRenderer> {
+    let xAxis =  chart.xAxes.push(am5xy.DateAxis.new(root, {
+        baseInterval: {
+            timeUnit: 'day',
+            count: 1
+        },
+        renderer: am5xy.AxisRendererX.new(root, {
+            minorGridEnabled: true,
+            minorLabelsEnabled: true,
+        }),
+        tooltip: am5.Tooltip.new(root, {})
+    }));
+
+    xAxis.set("minorDateFormats", {
+        "day":"dd",
+        "month":"MM"
+    });
+
+    return xAxis
+}
+
+export function addYAxis(root: am5.Root, chart: am5xy. XYChart): am5xy.ValueAxis<am5xy.AxisRenderer> {
+    let yAxis = chart.yAxes.push(am5xy.ValueAxis.new(root, {
+        renderer: am5xy.AxisRendererY.new(root, {})
+    }));
+
+    return yAxis;
+}
+
+export function addXYSeries(root: am5.Root, chart: am5xy.XYChart, xAxis: am5xy.DateAxis<am5xy.AxisRenderer>, yAxis: am5xy.ValueAxis<am5xy.AxisRenderer>): am5xy.XYSeries {
+    let series = chart.series.push(am5xy.ColumnSeries.new(root, {
+        name: "Series",
+        xAxis,
+        yAxis,
+        valueYField: "value",
+        valueXField: "date",
+        tooltip: am5.Tooltip.new(root, {
+          labelText: "{valueY}"
+        })
+      }));
+    return series;
 }

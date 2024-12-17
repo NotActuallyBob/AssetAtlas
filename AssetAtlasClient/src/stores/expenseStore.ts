@@ -3,13 +3,13 @@ import { ref } from 'vue'
 import restHelper from '../helpers/restHelper'
 import { Expense, expenseCategory } from '../models/Expense'
 import { ExpenseDto } from '../dtos/ExpenseDto'
+import { PieData } from '../models/PieData'
 
 export const useExpenseStore = defineStore('expense', () => {
-  // State
-  const expenses = ref([])
+  const expenses = ref<PieData[]>([])
   const expenseTotal = ref<number>(0);
 
-  const incomes = ref([])
+  const incomes = ref<PieData[]>([])
   const incomeTotal = ref<number>(0);
 
   const unCategorized = ref<Expense[]>([])
@@ -32,7 +32,7 @@ export const useExpenseStore = defineStore('expense', () => {
       expenseTotal.value += amount;
       return {
         category: getCategoryName(obj.item1),
-        amount
+        value: amount
       };
     });
   }
@@ -50,8 +50,8 @@ export const useExpenseStore = defineStore('expense', () => {
       const amount = obj.item2 / 100
       incomeTotal.value += amount;
       return {
-        source: obj.item1,
-        amount
+        category: obj.item1,
+        value: amount
       };
     });
   }
