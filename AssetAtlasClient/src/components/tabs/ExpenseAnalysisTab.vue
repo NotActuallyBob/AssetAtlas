@@ -35,6 +35,8 @@
         ></XYChart>
       </v-col>
       <v-col>
+        <h2>Expense/Day: {{ (expenseStore.expenseTotal / expenseStore.xyData.length).toFixed(2) }}€</h2>
+        <h2>Expense/Week: {{ (7 * expenseStore.expenseTotal / expenseStore.xyData.length).toFixed(2) }}€</h2>
       </v-col>
     </v-row>
 
@@ -78,7 +80,7 @@ import { onMounted, ref } from "vue";
   });
 
   let start = ref('2024-09-01')
-  let end = ref('2024-09-30')
+  let end = ref('2024-11-30')
 
   async function refreshExpenseData() {
     await expenseStore.refreshExpenses(start.value, end.value);

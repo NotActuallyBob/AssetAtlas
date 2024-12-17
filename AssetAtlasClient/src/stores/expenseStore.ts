@@ -23,7 +23,8 @@ export const useExpenseStore = defineStore('expense', () => {
         }
     });
 
-    xyData.value = response.data.map((obj: { item1: string; item2: number }) => {
+    xyData.value = response.data.map((obj: { item1: string; item2: any[] }) => {
+
       const amount = obj.item2 / 100
       return {
         date: new Date(obj.item1).getTime(),
