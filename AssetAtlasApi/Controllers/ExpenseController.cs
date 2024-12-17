@@ -96,5 +96,21 @@ namespace AssetAtlasApi.Controllers {
 
             return;
         }
+
+        [HttpGet("/api/XY")]
+        public List<Tuple<DateTime, int>> GetXY(string start, string end) {
+
+            DateTime startDate = DateTime.SpecifyKind(DateTime.Parse(start), DateTimeKind.Utc);
+            DateTime endDate = DateTime.SpecifyKind(DateTime.Parse(end), DateTimeKind.Utc);
+
+            DateTime iterator = startDate;
+            List<Tuple<DateTime, int>> list = new List<Tuple<DateTime, int>>();
+            while (iterator <= endDate) {
+                int sum = context.Expenses.Where(x => x.SpendTime.Year == iterator.Year && x.SpendTime.Month == iterator.Month && x.SpendTime.Day == iterator.Day).Sum(x => x.Amount);
+                list.Add(Tuple.Create(iterator, sum));
+                iterator = iterator.AddDays(1);
+            }
+            return list;
+        }
     }
 }

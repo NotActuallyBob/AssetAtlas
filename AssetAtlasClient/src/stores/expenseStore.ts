@@ -4,6 +4,7 @@ import restHelper from '../helpers/restHelper'
 import { Expense, expenseCategory } from '../models/Expense'
 import { ExpenseDto } from '../dtos/ExpenseDto'
 import { PieData } from '../models/PieData'
+import { XYDateData } from '../models/XYDateData'
 
 export const useExpenseStore = defineStore('expense', () => {
   const expenses = ref<PieData[]>([])
@@ -11,6 +12,26 @@ export const useExpenseStore = defineStore('expense', () => {
 
   const incomes = ref<PieData[]>([])
   const incomeTotal = ref<number>(0);
+
+  var xyData = ref<XYDateData[]>([]);
+
+  const refreshXY = async (start: string, end: string) => {
+    const response = await restHelper.get("/api/XY", {
+        params: {
+            start,
+            end
+        }
+    });
+
+    xyData.value = response.data.map((obj: { item1: string; item2: number }) => {
+      const amount = obj.item2 / 100
+      return {
+        date: new Date(obj.item1).getTime(),
+        value: amount
+      };
+    });
+    console.log(xyData);
+  }
 
   const unCategorized = ref<Expense[]>([])
 
@@ -82,6 +103,8 @@ export const useExpenseStore = defineStore('expense', () => {
     refreshUncategorized,
     incomes,
     incomeTotal,
-    refreshIncomes
+    refreshIncomes,
+    xyData,
+    refreshXY
   }
 })

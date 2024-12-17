@@ -31,6 +31,11 @@ export function createRoot(containerId: string): am5.Root {
         am5themes_Animated.new(root)
     ]);
 
+    root.dateFormatter.setAll({
+        dateFormat: "dd-MM-yyyy",
+        dateFields: ["date"]
+      });
+
     return root;
 }
 
@@ -65,52 +70,49 @@ export function addSeries(root: am5.Root, chart: am5percent.PieChart, name: stri
 
 
 export function createXY(root: am5.Root): am5xy.XYChart {
-    let chart: am5xy.XYChart = am5xy.XYChart.new(root, {
-        panX: false,
-        panY: false
-    });
+    let chart = root.container.children.push(am5xy.XYChart.new(root, {
+    }));
 
     return chart;
 }
 
 export function addXAxis(root: am5.Root, chart: am5xy. XYChart): am5xy.DateAxis<am5xy.AxisRenderer> {
-    let xAxis =  chart.xAxes.push(am5xy.DateAxis.new(root, {
-        baseInterval: {
-            timeUnit: 'day',
-            count: 1
-        },
-        renderer: am5xy.AxisRendererX.new(root, {
-            minorGridEnabled: true,
-            minorLabelsEnabled: true,
+    let xAxis = chart.xAxes.push(am5xy.DateAxis.new(root, {
+        baseInterval: { timeUnit: "day", count: 1 },
+        autoZoom: false,
+        renderer: am5xy.AxisRendererX.new(root, { 
+            minGridDistance: 50,
+            minorGridEnabled:true
         }),
+        gridIntervals: [
+            { timeUnit: "week", count: 1 }
+          ],
         tooltip: am5.Tooltip.new(root, {})
     }));
-
-    xAxis.set("minorDateFormats", {
-        "day":"dd",
-        "month":"MM"
-    });
 
     return xAxis
 }
 
 export function addYAxis(root: am5.Root, chart: am5xy. XYChart): am5xy.ValueAxis<am5xy.AxisRenderer> {
     let yAxis = chart.yAxes.push(am5xy.ValueAxis.new(root, {
-        renderer: am5xy.AxisRendererY.new(root, {})
-    }));
+        numberFormat: "#€",
+        renderer: am5xy.AxisRendererY.new(root, {}),
+        autoZoom: false,
+        tooltip: am5.Tooltip.new(root, {})
+      }));
+      
 
     return yAxis;
 }
 
 export function addXYSeries(root: am5.Root, chart: am5xy.XYChart, xAxis: am5xy.DateAxis<am5xy.AxisRenderer>, yAxis: am5xy.ValueAxis<am5xy.AxisRenderer>): am5xy.XYSeries {
     let series = chart.series.push(am5xy.ColumnSeries.new(root, {
-        name: "Series",
-        xAxis,
-        yAxis,
+        xAxis: xAxis,
+        yAxis: yAxis,
         valueYField: "value",
         valueXField: "date",
         tooltip: am5.Tooltip.new(root, {
-          labelText: "{valueY}"
+          labelText: "{valueX.formatDate()}, y: {valueY}€"
         })
       }));
     return series;
