@@ -13,25 +13,28 @@ export const useExpenseStore = defineStore('expense', () => {
   const incomes = ref<PieData[]>([])
   const incomeTotal = ref<number>(0);
 
-  var xyData = ref<XYDateData[]>([]);
+  let xyData = ref<XYDateData[][]>([]);
 
   const refreshXY = async (start: string, end: string) => {
     const response = await restHelper.get("/api/XY", {
-        params: {
-            start,
-            end
-        }
+      params: {
+        start,
+        end
+      }
     });
 
-    xyData.value = response.data.map((obj: { item1: string; item2: any[] }) => {
+    
+    const transformedData = response.data.map((innerArray: { item1: string; item2: number }[]) =>
+      innerArray.map((x) => {
+        const amount = x.item2 / 100;
+        return {
+          date: new Date(x.item1).getTime(),
+          value: amount,
+        };
+      })
+    );
 
-      const amount = obj.item2 / 100
-      return {
-        date: new Date(obj.item1).getTime(),
-        value: amount
-      };
-    });
-    console.log(xyData);
+    xyData.value = transformedData;
   }
 
   const unCategorized = ref<Expense[]>([])

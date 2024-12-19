@@ -3,6 +3,7 @@ using AssetAtlasApi.Models;
 using AssetAtlasApi.Services;
 using CsvHelper;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Globalization;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -38,13 +39,13 @@ namespace AssetAtlasApi.Controllers {
                 // Map CsvExpense to Expense model
                 IEnumerable<Expense> expenses = csvRecords.Where(x => x.Summa.StartsWith("-") && !x.Tapahtumalaji.Contains("OMA")).Select(record => new Expense {
                     Amount = (int)(decimal.Parse(record.Summa.Replace(",", "."), NumberStyles.Any, CultureInfo.InvariantCulture) * -100),
-                    SpendTime = DateTime.SpecifyKind(DateTime.ParseExact(record.Kirjauspäivä, "dd.MM.yyyy", CultureInfo.InvariantCulture), DateTimeKind.Utc),
+                    SpendTime = DateTime.SpecifyKind(DateTime.ParseExact(record.Maksupäivä, "dd.MM.yyyy", CultureInfo.InvariantCulture), DateTimeKind.Utc),
                     Recipient = record.SaajanNimi
                 }).ToList();
 
                 IEnumerable<Income> incomes = csvRecords.Where(x => x.Summa.StartsWith("+") && !x.Tapahtumalaji.Contains("OMA")).Select(record => new Income {
                     Amount = (int)(decimal.Parse(record.Summa.Replace(",", "."), NumberStyles.Any, CultureInfo.InvariantCulture) * 100),
-                    PaymentTime = DateTime.SpecifyKind(DateTime.ParseExact(record.Kirjauspäivä, "dd.MM.yyyy", CultureInfo.InvariantCulture), DateTimeKind.Utc),
+                    PaymentTime = DateTime.SpecifyKind(DateTime.ParseExact(record.Maksupäivä, "dd.MM.yyyy", CultureInfo.InvariantCulture), DateTimeKind.Utc),
                     Source = record.Maksaja
                 }).ToList();
 ;
@@ -98,18 +99,24 @@ namespace AssetAtlasApi.Controllers {
         }
 
         [HttpGet("/api/XY")]
-        public List<Tuple<DateTime, int>> GetXY(string start, string end) {
+        public List<List<Tuple<DateTime, int>>> GetXY(string start, string end) {
 
             DateTime startDate = DateTime.SpecifyKind(DateTime.Parse(start), DateTimeKind.Utc);
             DateTime endDate = DateTime.SpecifyKind(DateTime.Parse(end), DateTimeKind.Utc);
 
-            DateTime iterator = startDate;
-            List<Tuple<DateTime, int>> list = new List<Tuple<DateTime, int>>();
-            while (iterator <= endDate) {
-                int sum = context.Expenses.Where(x => x.SpendTime.Year == iterator.Year && x.SpendTime.Month == iterator.Month && x.SpendTime.Day == iterator.Day).Sum(x => x.Amount);
-                list.Add(Tuple.Create(iterator, sum));
-                iterator = iterator.AddDays(1);
-            }
+            var list = new List<List<Tuple<DateTime, int>>>();
+            foreach (Category category in Enum.GetValues(typeof(Category))) {
+				DateTime iterator = startDate;
+				var listInner = new List<Tuple<DateTime, int>>();
+				while (iterator <= endDate) {
+					int sum = context.Expenses.Where(x => x.ExpenseCategory == category && x.SpendTime.Year == iterator.Year && x.SpendTime.Month == iterator.Month && x.SpendTime.Day == iterator.Day).Sum(x => x.Amount);
+					listInner.Add(Tuple.Create(iterator, sum));
+					iterator = iterator.AddDays(1);
+				}
+
+                list.Add(listInner);
+			}
+            
             return list;
         }
     }

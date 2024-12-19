@@ -20,7 +20,7 @@ const colorSets: Record<ColorSetName, am5.Color[]> = {
     ],
 }
 
-function getColorSet(name: ColorSetName): am5.Color[] {
+export function getColorSet(name: ColorSetName): am5.Color[] {
     return colorSets[name] || colorSets["default"];
 }
 
@@ -71,6 +71,7 @@ export function addSeries(root: am5.Root, chart: am5percent.PieChart, name: stri
 
 export function createXY(root: am5.Root): am5xy.XYChart {
     let chart = root.container.children.push(am5xy.XYChart.new(root, {
+        layout: root.verticalLayout
     }));
 
     return chart;
@@ -105,8 +106,10 @@ export function addYAxis(root: am5.Root, chart: am5xy. XYChart): am5xy.ValueAxis
     return yAxis;
 }
 
-export function addXYSeries(root: am5.Root, chart: am5xy.XYChart, xAxis: am5xy.DateAxis<am5xy.AxisRenderer>, yAxis: am5xy.ValueAxis<am5xy.AxisRenderer>): am5xy.XYSeries {
+export function addXYSeries(name: string, root: am5.Root, chart: am5xy.XYChart, xAxis: am5xy.DateAxis<am5xy.AxisRenderer>, yAxis: am5xy.ValueAxis<am5xy.AxisRenderer>): am5xy.XYSeries {
     let series = chart.series.push(am5xy.ColumnSeries.new(root, {
+        name,
+        stacked: true,
         xAxis: xAxis,
         yAxis: yAxis,
         valueYField: "value",
@@ -115,5 +118,7 @@ export function addXYSeries(root: am5.Root, chart: am5xy.XYChart, xAxis: am5xy.D
           labelText: "{valueX.formatDate()}, y: {valueY}€"
         })
       }));
+
+      
     return series;
 }
