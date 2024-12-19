@@ -7,7 +7,8 @@ A project to keep track of my personal finances. It is not publicly hosted
 - The rest are manually categorized using the frontend
 - Clean expense analysis view to analyze the expenses of some time period
 
-![image](https://github.com/user-attachments/assets/6dcf89ab-d130-44fd-ba0b-86b4f5df9cda)
+![image](https://github.com/user-attachments/assets/69ccbd8f-da22-471a-a8b8-c8faa23b260d)
+
 
 ## Frontend
 The frontend is written in Vue 3 utilizing some packages on top of it:
