@@ -7,16 +7,16 @@ export type ColorSetName = "default";
 
 const colorSets: Record<ColorSetName, am5.Color[]> = {
     default: [
-        am5.color("#000"),
-        am5.color("#e163cf"),
-        am5.color("#2a53c7"),
-        am5.color("#89b8ff"),
-        am5.color("#20886a"),
-        am5.color("#26e674"),
-        am5.color("#6cf29f"),
-        am5.color("#ffc114"),
-        am5.color("#ab7a03"),
-        am5.color("#e39e52"),
+        am5.color("#5A5A5A"),
+        am5.color("#4CAF50"),
+        am5.color("#2196F3"),
+        am5.color("#FF5722"),
+        am5.color("#9C27B0"),
+        am5.color("#E91E63"),
+        am5.color("#FFC107"),
+        am5.color("#795548"),
+        am5.color("#009688"),
+        am5.color("#9E9E9E"),
     ],
 }
 
