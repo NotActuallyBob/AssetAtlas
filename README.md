@@ -14,6 +14,7 @@ A project to keep track of my personal finances. It is not publicly hosted
 The frontend is written in Vue 3 utilizing some packages on top of it:
 - Vuetify
 - Vue-Router
+- amcharts5
 - Pinia
 - Axios
 
