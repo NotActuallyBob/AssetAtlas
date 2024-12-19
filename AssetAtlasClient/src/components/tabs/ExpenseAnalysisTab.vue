@@ -25,17 +25,6 @@
       </v-col>
     </v-row>
 
-    <h1>Expense XY Chart</h1>
-    <button @click="refreshXYData">Refresh</button>
-    <v-row>
-      <v-col>
-        <XYChart
-          :data="expenseStore.xyData"
-          name="xyChart"
-        ></XYChart>
-      </v-col>
-    </v-row>
-
     <h1>Income Chart</h1>
     <button @click="refreshIncomeData">Refresh</button>
     <v-row>
@@ -56,6 +45,17 @@
             </template>
           </v-data-table>
           <h2>Total {{ expenseStore.incomeTotal.toFixed(0) }}€</h2>
+      </v-col>
+    </v-row>
+
+    <h1>Expense XY Chart</h1>
+    <button @click="refreshXYData">Refresh</button>
+    <v-row>
+      <v-col>
+        <XYChart
+          :data="expenseStore.xyData"
+          name="xyChart"
+        ></XYChart>
       </v-col>
     </v-row>
   </v-container>
